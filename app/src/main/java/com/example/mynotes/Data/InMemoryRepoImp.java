@@ -66,9 +66,10 @@ public class InMemoryRepoImp implements Repo {
     public void update(Note note) {
 
         for (int i = 0; i < notes.size(); i++) {
-            if (notes.get(i).getId() == note.getId())
+            if (notes.get(i).getId() == note.getId()) {
                 notes.set(i, note);
-            break;
+                break;
+            }
         }
     }
 
