@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyNotes</string>
+    <string name="save_changes">Save Changes</string>
 </resources>
