@@ -61,9 +61,9 @@ public class EditNoteFragment extends Fragment implements View.OnClickListener {
         Bundle args = getArguments();
 
         if (args != null && args.containsKey(ARG_PARAM)){
-            Note note = (Note) args.getSerializable(ARG_PARAM);
+            note = (Note) args.getSerializable(ARG_PARAM);
 
-            int noteID = note.getId();
+            //int noteID = note.getId();
             editTitle.setText(note.getTitle());
             editDescription.setText(note.getDescription());
         }
@@ -75,15 +75,24 @@ public class EditNoteFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
 
         Note editedNote = new Note(editTitle.getText().toString(), editDescription.getText().toString());
-//        editedNote.setId(note.getId());
+        editedNote.setId(note.getId());
 
-        Bundle editedNoteArgs = new Bundle();
-        editedNoteArgs.putSerializable(EDITED_NOTE, editedNote);
+        ((EditNoteController) requireActivity()).noteEdited(editedNote);
 
-       getParentFragmentManager().setFragmentResult(REQUEST_KEY, editedNoteArgs);
 
-//        requireActivity().getSupportFragmentManager().popBackStack();
+//        Bundle editedNoteArgs = new Bundle();
+//        editedNoteArgs.putSerializable(EDITED_NOTE, editedNote);
+//
+//       getParentFragmentManager().setFragmentResult(REQUEST_KEY, editedNoteArgs);
+
+        requireActivity().getSupportFragmentManager().popBackStack();
 
 
     }
+
+    public interface EditNoteController{
+        void noteEdited(Note note);
+    }
+
+    private EditNoteController editNoteController;
 }

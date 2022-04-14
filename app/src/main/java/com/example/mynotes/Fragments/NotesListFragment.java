@@ -100,4 +100,6 @@ public class NotesListFragment extends Fragment implements NotesAdapter.OnNoteCl
             adapter.notifyItemChanged(position);
         }
     }
+
+
 }
