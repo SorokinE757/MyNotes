@@ -30,6 +30,7 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
 
     private static final String EDIT_NOTE_TAG = "EDIT_NOTE_TAG";
 
+
     FragmentManager manager;
 
     @Override
