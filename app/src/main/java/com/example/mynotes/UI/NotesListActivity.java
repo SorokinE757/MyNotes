@@ -30,15 +30,11 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
 
     private static final String EDIT_NOTE_TAG = "EDIT_NOTE_TAG";
 
-
     FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
 
         setContentView(R.layout.activity_main);
 
@@ -58,15 +54,13 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
 
         manager = getSupportFragmentManager();
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             manager.beginTransaction().replace(R.id.host, new NotesListFragment(), EDIT_NOTE_TAG).commit();
         }
 
-        if (isLandScape()){
-            getSupportFragmentManager().beginTransaction().replace(R.id.edit_note_host, new EditNoteFragment()).commit();
-        }//else {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.host, notesListFragment).commit();
-//        }
+        if (isLandScape()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.edit_note_host, new EditNoteFragment()).replace(R.id.host, new NotesListFragment(), EDIT_NOTE_TAG).commit();
+        }
 
     }
 
@@ -84,8 +78,8 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        if (requestCode == EDIT_NOTE_REQUEST){
-            if (resultCode == RESULT_OK && data != null){
+        if (requestCode == EDIT_NOTE_REQUEST) {
+            if (resultCode == RESULT_OK && data != null) {
                 note = (Note) data.getSerializableExtra(Note.NOTE);
                 repo.update(note);
                 adapter.setNotes(repo.getAll());
@@ -98,15 +92,13 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
 
     @Override
     public void editNote(Note note) {
-//        EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(note);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.host, editNoteFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(null).commit();
-        if (isLandScape()){
+        if (isLandScape()) {
             EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(note);
             getSupportFragmentManager().beginTransaction().replace(R.id.edit_note_host, editNoteFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
-        }else{
+        } else {
             EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(note);
-            getSupportFragmentManager().beginTransaction().replace(R.id.host, editNoteFragment)
+            getSupportFragmentManager().beginTransaction().replace(R.id.host, editNoteFragment).addToBackStack(null)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
         }
     }
@@ -114,10 +106,10 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     @Override
     public void noteEdited(Note note) {
         repo.update(note);
-        ((NotesListFragment)manager.findFragmentByTag(EDIT_NOTE_TAG)).updateNotes(note, note.getId());
+        ((NotesListFragment) manager.findFragmentByTag(EDIT_NOTE_TAG)).updateNotes(note, note.getId());
     }
 
-    private boolean isLandScape(){
+    private boolean isLandScape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 }

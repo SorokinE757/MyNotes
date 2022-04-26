@@ -12,17 +12,15 @@ import com.example.mynotes.R;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.mynotes.Data.InMemoryRepoImp;
 import com.example.mynotes.Data.Note;
 import com.example.mynotes.Data.Repo;
 import com.example.mynotes.Recycler.NotesAdapter;
-import com.example.mynotes.UI.EditNoteActivity;
+
 
 public class NotesListFragment extends Fragment implements NotesAdapter.OnNoteClickListener {
 
