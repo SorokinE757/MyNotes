@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MyNotes</string>
     <string name="save_changes">Save Changes</string>
+    <string name="add_button">add</string>
+    <string name="show_info">Show info</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="info_text">Testing in process... \n Here can be Info About app</string>
 </resources>

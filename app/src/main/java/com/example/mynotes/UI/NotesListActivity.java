@@ -1,7 +1,11 @@
 package com.example.mynotes.UI;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -11,14 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.mynotes.Data.InMemoryRepoImp;
 import com.example.mynotes.Data.Note;
 import com.example.mynotes.Data.Repo;
 import com.example.mynotes.Fragments.EditNoteFragment;
 import com.example.mynotes.Fragments.NotesListFragment;
+import com.example.mynotes.Fragments.ShowInfo;
 import com.example.mynotes.R;
 import com.example.mynotes.Recycler.NotesAdapter;
+import com.google.android.material.navigation.NavigationView;
 
 public class NotesListActivity extends AppCompatActivity implements NotesAdapter.OnNoteClickListener, NotesListFragment.Controller, EditNoteFragment.EditNoteController {
 
@@ -50,6 +58,9 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
 //        list.setAdapter(adapter);
 //        list.setLayoutManager(new LinearLayoutManager(this));
 
+//        initToolbar();
+        initToolbarAndDrawer();
+
         notesListFragment = new NotesListFragment();
 
         manager = getSupportFragmentManager();
@@ -59,8 +70,11 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
         }
 
         if (isLandScape()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.edit_note_host, new EditNoteFragment()).replace(R.id.host, new NotesListFragment(), EDIT_NOTE_TAG).commit();
+            note = new Note(-1, "New note", "New description");
+            getSupportFragmentManager().beginTransaction().replace(R.id.edit_note_host, EditNoteFragment.newInstance(note)).replace(R.id.host, new NotesListFragment(), EDIT_NOTE_TAG).commit();
         }
+
+        //initToolbarAndDrawer();
 
     }
 
@@ -112,4 +126,78 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     private boolean isLandScape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
-}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_add:
+
+                note = new Note(-1, "New note", "New description");
+
+                if (isLandScape()) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.edit_note_host, EditNoteFragment.newInstance(note))
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.host, EditNoteFragment.newInstance(note)).addToBackStack(null)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//    private void initToolbar() {
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
+
+    private void initToolbarAndDrawer() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        initDrawer(toolbar);
+    }
+
+
+    private void initDrawer(Toolbar toolbar) {
+
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.navi_menu:
+                        showInfo();
+                        drawer.close();
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void showInfo() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.host, new ShowInfo())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    }
+
