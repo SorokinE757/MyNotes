@@ -193,6 +193,12 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
     }
 
     private void showInfo() {
+        if (isLandScape()) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.host, new ShowInfo())
+                    .addToBackStack(null)
+                    .commit();
+        }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.host, new ShowInfo())
                 .addToBackStack(null)
