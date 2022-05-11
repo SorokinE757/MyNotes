@@ -3,6 +3,7 @@ package com.example.mynotes.UI;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,11 +13,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.mynotes.Data.InMemoryRepoImp;
 import com.example.mynotes.Data.Note;
@@ -203,6 +206,32 @@ public class NotesListActivity extends AppCompatActivity implements NotesAdapter
                 .replace(R.id.host, new ShowInfo())
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            super.onBackPressed();
+        }else {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Закрытие приложения")
+                    .setMessage("Вы точно хотите выйти?")
+                    .setPositiveButton("Да", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            Toast.makeText(NotesListActivity.this, "Пока, пока", Toast.LENGTH_SHORT).show();
+                        }
+
+                    })
+                    .setNegativeButton("Нет", null)
+                    .show();
+        }
+
+
     }
 
     }
